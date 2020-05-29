@@ -1,8 +1,8 @@
-## Back Nrgybox
+## Back Givyoo
 
 Team : 
-- Johanna
-- Chloé
-- Benoit
-- Enzo
-- Michaël
+- Gregory
+- Christelle
+- Elodie
+- Mathilde
+- Pierre
