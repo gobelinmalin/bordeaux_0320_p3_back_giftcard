@@ -22,7 +22,12 @@ router.get('/:id', (req, res) => {
         if (err) {
             res.status(500).json('Erreur lors de la sélection d\'un client')
         } else {
-            res.status(200).json(result)
+            if (result[0] == undefined) {
+                res.json('Wrong id')
+            } else {
+                res.status(200).json(result)
+            }
+            
         }
     })
 })
@@ -54,7 +59,6 @@ router.put('/:id', (req, res) => {
                     res.status(200).json(result2)
                 }
             })
-            res.status(200).json()
         }
     })
 })
