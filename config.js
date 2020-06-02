@@ -6,7 +6,7 @@ dotenv.config();
 var pool = mysql.createPool({
   host: process.env.HEROKU_HOST,
   user: process.env.HEROKU_USER,
-  password: process.env_HEROKU_PASSWORD,
+  password: process.env.HEROKU_PASSWORD,
   database: process.env.HEROKU_DATABASE
 });
 module.exports = {
