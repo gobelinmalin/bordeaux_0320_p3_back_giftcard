@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 
-//import route
+// import route
 const clients = require('./clients');
 const customizations = require('./customizations');
 const categories = require('./category')
