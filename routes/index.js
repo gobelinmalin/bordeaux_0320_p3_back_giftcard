@@ -5,7 +5,7 @@ const router = express.Router();
 // import route
 const clients = require('./clients');
 const customizations = require('./customizations');
-const categories = require('./category')
+const categories = require('./categories')
 
 // create router
 router.use('/clients', clients);
