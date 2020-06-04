@@ -27,8 +27,8 @@ router.post('/', (req, res) => {
 
 // PUT a font with it's ID
 router.put('/:id', (req, res) => {
-    const body = req.body
-    const id = req.params.id
+    const formData = req.body;
+    const id = req.params;
     connection.query('UPDATE font SET ? WHERE id = ?', [body, id], (err, result) => {
         if (err) {
             res.status(500).json('Erreur lors de la modification d\'une font');
@@ -46,7 +46,7 @@ router.put('/:id', (req, res) => {
 
 // DELETE a font with it's ID.
 router.delete('/:id', (req, res) => {
-    const id = req.params.id
+    const id = req.params;
     connection.query('DELETE FROM font WHERE id = ?', id, (err, result) => {
         if (err) {
             res.status(500).json('Erreur lors de la supression d\'une font');
