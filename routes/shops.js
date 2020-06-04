@@ -31,7 +31,7 @@ router.get('/', (req, res) => {
 
 //GET shop by ID
 router.get('/:id', (req, res) => {
-    const id = req.params.id
+    const id = req.params
 
     connection.query('SELECT * FROM shop WHERE id = ?', [id], (err, result) => {
         if (err) {
@@ -86,9 +86,9 @@ router.post('/:idShop/countries/:idCountry', (req, res) => {
 // UPDATE a shop by its ID
 router.put('/:id', (req,res) => {
     const formData = req.body;
-    const idShop = req.params.id;
+    const id = req.params
 
-    connection.query('UPDATE shop SET ? WHERE id = ?', [formData, idShop], (err) => {
+    connection.query('UPDATE shop SET ? WHERE id = ?', [formData, id], (err) => {
         if(err) {
             res.status(500).json('Error updating a shop')
         } else {
