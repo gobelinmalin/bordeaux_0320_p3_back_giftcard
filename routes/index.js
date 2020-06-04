@@ -6,15 +6,15 @@ const tags = require('./tags')
 const products = require('./products');
 const customizations = require('./customizations');
 const categories = require('./categories');
+const order_clients = require('./order_clients');
 
 const router = express.Router();
 
-router.use('/clients', clients)
-router.use('/products', products)
-router.use('/tags', tags)
+router.use('/clients', clients);
+router.use('/products', products);
+router.use('/tags', tags);
 router.use('/customizations', customizations);
-router.use('/categories', categories)
-
-
+router.use('/categories', categories);
+router.use('/order_clients', order_clients);
 
 module.exports = router;
