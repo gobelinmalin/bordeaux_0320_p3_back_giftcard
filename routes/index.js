@@ -8,6 +8,7 @@ const customizations = require('./customizations');
 const countries = require('./countries');
 const categories = require('./categories');
 const order_clients = require('./order_clients');
+const orders = require('./orders');
 
 const router = express.Router();
 
@@ -17,6 +18,7 @@ router.use('/tags', tags);
 router.use('/customizations', customizations);
 router.use('/categories', categories);
 router.use('/order_clients', order_clients);
+router.use('/orders', orders);
 router.use('/countries', countries);
 
 module.exports = router;
