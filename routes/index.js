@@ -18,7 +18,7 @@ router.use('/products', products);
 router.use('/tags', tags);
 router.use('/customizations', customizations);
 router.use('/categories', categories);
-router.use('/order_clients', order_clients);
+router.use('/clients', order_clients);
 router.use('/orders', orders);
 router.use('/countries', countries);
 router.use('/themes', themes);
