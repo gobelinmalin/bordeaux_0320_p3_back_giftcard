@@ -5,8 +5,8 @@ const router = express.Router();
 
 // get all orders
 router.get('/', (req, res) => {
-    connection.query('SELECT * FROM order', (err, results) => {
-        if(err) {
+    connection.query('SELECT * FROM `order`', (err, results) => {
+        if(err){
             console.log(err);
             res.status(500).send('Erreur lors de la récupération des commandes');
         } else {
@@ -18,8 +18,8 @@ router.get('/', (req, res) => {
 // get one order
 router.get('/:id', (req, res) => {
     const oneOrder = req.params.id;
-    connection.query('SELECT * FROM order WHERE id = ?', [oneOrder], (err, results) => {
-        if(err) {
+    connection.query('SELECT * FROM `order` WHERE id = ?', [oneOrder], (err, results) => {
+        if(err){
             console.log(err);
             res.status(500).send(`Erreur lors de la récupération de la commande ${oneOrder}`);
         } 
@@ -34,7 +34,7 @@ router.get('/:id', (req, res) => {
 // post one order
 router.post('/', (req, res) => {
     const addOrder = req.body;
-    connection.query('INSERT INTO order SET ?', addOrder, (err, results) => {
+    connection.query('INSERT INTO `order` SET ?', addOrder, (err, results) => {
         if(err) {
             console.log(err);
             res.status(500).send('Erreur lors de la sauvegarde de la commande');
@@ -48,7 +48,7 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
     const idOrder = req.params.id;
     const formData = req.body;
-    connection.query('UPDATE order SET ? WHERE id = ?', [formData, idOrder], err => {
+    connection.query('UPDATE `order` SET ? WHERE id = ?', [formData, idOrder], err => {
         if(err) {
             console.log(err);
             res.status(500).send(`Erreur lors de la modification de la commande ${idOrder}`);
@@ -61,7 +61,7 @@ router.put('/:id', (req, res) => {
 // delete one order
 router.delete('/:id', (req, res) => {
     const idOrder = req.params.id;
-    connection.query('DELETE FROM order WHERE id = ?', [idOrder], err => {
+    connection.query('DELETE FROM `order` WHERE id = ?', [idOrder], err => {
         if (err) {
             console.log(err);
             res.status(500).send('Erreur lors de la suppression de la commande')
