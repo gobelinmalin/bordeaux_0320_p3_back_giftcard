@@ -8,6 +8,7 @@ const customizations = require('./customizations');
 const fonts = require('./fonts');
 const countries = require('./countries');
 const categories = require('./categories');
+const orders = require('./orders');
 
 const router = express.Router();
 
@@ -18,5 +19,7 @@ router.use('/customizations', customizations);
 router.use('/fonts', fonts);
 router.use('/countries', countries);
 router.use('/categories', categories);
+router.use('/orders', orders);
+
 
 module.exports = router;
