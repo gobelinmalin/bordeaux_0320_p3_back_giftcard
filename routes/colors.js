@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 
 // GET one color with its ID
 router.get('/:id', (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
 
     connection.query('SELECT * FROM color WHERE id = ?', [id], (err, result) => {
         if(err) {
@@ -45,7 +45,7 @@ router.post('/', (req,res) => {
 // UPDATE one color with its ID
 router.put('/:id', (req, res) => {
     const formData = req.body;
-    const id = req.params.id;
+    const { id } = req.params;
 
     connection.query('UPDATE color SET ? WHERE id = ?', [formData, id], (err) => {
         if(err) {
@@ -58,7 +58,7 @@ router.put('/:id', (req, res) => {
 
 // DELETE one color with its ID
 router.delete('/:id', (req, res) => {
-    const idColor = req.params.id;
+    const { idColor } = req.params;
 
     connection.query('DELETE FROM color WHERE id = ?', [idColor], (err, result) => {
         if(err) {
