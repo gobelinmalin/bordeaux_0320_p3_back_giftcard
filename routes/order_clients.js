@@ -2,54 +2,42 @@ const express = require('express');
 const connection = require('../config');
 const router = express.Router();
 
-/* GET all orders from one client*/
-router.get('/:id/orders', (req, res) => {
+/* GET all orders of one client*/
+router.get('/:idClient/orders', (req, res) => {
 
-    const { id } = req.params
+    const { idClient } = req.params
 
-    connection.query('SELECT * FROM `order` AS o JOIN `client` AS c ON o.id_client = c.id WHERE c.id = ?',
-        id, (err, results) => {
+    connection.query('SELECT * FROM `order` AS o LEFT JOIN `client` AS c ON c.id = o.id_client WHERE c.id = ?',
+        idClient, (err, results) => {
             if (err) {
                 res.status(500).json(err)
             } else {
                 res.status(200).json(results)
             }
         })
-
 })
 
 /* GET one order of one client */
+router.get('/:idClient/orders/:idOrder', (req, res) => {
 
-router.get('/:id/orders/:id', (req, res) => {
+    const { idClient, idOrder } = req.params
+    const sql = 'SELECT * FROM `order` AS o LEFT JOIN client AS c ON o.id_client = c.id WHERE c.id = ? AND o.id = ?'
 
-    const { id } = req.params
+    connection.query(sql, [idClient, idOrder], (err, results) => {
 
-    connection.query('SELECT * FROM `order` AS o JOIN `client` AS c ON o.id_client = c.id WHERE o.id = ?',
-        id, (err, results) => {
-            if (err) {
-                res.status(500).json(err)
-            } else {
-                res.status(200).json(results)
-            }
-        })
-
-
-})
-
-// /* POST one order by a client */ UTILE?
-/* router.post('/:id/orders', (req, res) => {
-
-    const { id } = req.params
-    const { body } = req
-
-    connection.query(`INSERT INTO \`order\` AS o SET ? WHERE o.id_client = ${id}`, [body, id], (err, result) => {
         if (err) {
-            res.status(500).send('L\' ordre n\'as pas pu être ajouté')
+
+            res.status(500).json(err)
+
+        } else if (results.length === 0) {
+
+            res.status(400).send(" La commande du client est inexistante")
+
         } else {
-            res.status(200).json({ status: 'succes' })
+
+            res.status(200).json(results[0])
         }
     })
-}) */
-
+})
 
 module.exports = router
