@@ -11,6 +11,7 @@ const countries = require('./countries');
 const categories = require('./categories');
 const orders = require('./orders');
 const colors = require('./colors');
+const events =require('./events')
 
 const router = express.Router();
 
@@ -24,6 +25,6 @@ router.use('/countries', countries);
 router.use('/categories', categories);
 router.use('/orders', orders);
 router.use('/colors', colors);
-
+router.use('/events', events)
 
 module.exports = router;
