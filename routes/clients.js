@@ -66,7 +66,7 @@ router.get('/:idClient/orders/:idOrder', (req, res) => {
     })
 })
 
-/* GET all products of one order of one client */
+// GET all products of one order of one client
 router.get('/:idClient/orders/:idOrder/products', (req, res) => {
 
     const { idClient, idOrder } = req.params
@@ -84,7 +84,7 @@ router.get('/:idClient/orders/:idOrder/products', (req, res) => {
     })
 });
 
-/* GET one product of one order of one client */
+// GET one product of one order of one client
 router.get('/:idClient/orders/:idOrder/products/:idProduct', (req, res) => {
 
     const { idClient, idOrder, idProduct } = req.params
