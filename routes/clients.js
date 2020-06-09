@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
     connection.query('SELECT * FROM client', (err, result)=> {
         console.log(err)
         if (err) {
-            res.status(500).json('Erreur lors de la récupéation des clients')
+            res.status(500).json('Erreur lors de la récupération des clients')
         } else {
             res.status(200).json(result)
         }

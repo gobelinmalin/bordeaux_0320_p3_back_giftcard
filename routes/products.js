@@ -44,8 +44,8 @@ router.get('/', (req, res) => {
             } else {
                 res.json(result)
             }
-    
-    
+
+
         })
     }
 })
