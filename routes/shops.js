@@ -31,7 +31,7 @@ router.get('/', (req, res) => {
 
 //GET shop by ID
 router.get('/:id', (req, res) => {
-    const id = req.params
+    const { id } = req.params;
 
     connection.query('SELECT * FROM shop WHERE id = ?', [id], (err, result) => {
         if (err) {
@@ -61,7 +61,7 @@ router.get('/:idShop/products/:idProduct', (req, res) => {
 
 // POST a new shop
 router.post('/', (req, res) => {
-    const formData = req.body
+    const formData = req.body;
     connection.query('INSERT INTO shop SET ?', [formData], (err, result) => {
         if (err) {
             res.status(500).json('Error adding a new shop');
@@ -86,7 +86,7 @@ router.post('/:idShop/countries/:idCountry', (req, res) => {
 // UPDATE a shop by its ID
 router.put('/:id', (req,res) => {
     const formData = req.body;
-    const id = req.params
+    const { id } = req.params;
 
     connection.query('UPDATE shop SET ? WHERE id = ?', [formData, id], (err) => {
         if(err) {
@@ -100,7 +100,7 @@ router.put('/:id', (req,res) => {
 
 // DELETE a shop
 router.delete('/:id', (req, res) => {
-    const idShop = req.params.id;
+    const { idShop } = req.params;
 
     connection.query('DELETE FROM shop WHERE id = ?', [idShop] ,(err, result) => {
         if (err) {
