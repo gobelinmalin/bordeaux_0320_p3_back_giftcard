@@ -30,8 +30,6 @@ router.post('/signup', (req, res) => {
         } else {
             res.status(500).send(err);
         };
-
-
     })
 });
 
