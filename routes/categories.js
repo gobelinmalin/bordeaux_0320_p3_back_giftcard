@@ -33,7 +33,7 @@ router.post('/', (req, res) => {
     })
 })
 
-
+,
 /* all categories by id*/
 router.get('/:id', (req, res) => {
 
