@@ -195,6 +195,43 @@ router.delete('/:idClient/products/:idProduct/favorites', (req, res) => {
             res.sendStatus(200)
         }
     })
+});
+
+/////////////////////////////////////////////////////// Favorites shops //////////////////////////////////////////////////////////
+
+//GET all the favorite shops of one client by it's ID
+router.get('/:idClient/favorites/shops', (req, res) => {
+    connection.query('SELECT * FROM favorite_shop AS f JOIN shop AS s ON f.id_shop = s.id WHERE id_client = ?', req.params.idClient, (err, result) => {
+        if (err) {
+            res.status(500).json(err)
+        } else  {
+            res.status(200).json(result)
+        }
+    })
+});
+
+//POST a new favorite with the id of a client pair with the id of the shop (jointure)
+router.post('/:idClient/favorites/shops/:idShop', (req, res) => {
+    const { idClient, idShop} = req.params
+    connection.query('INSERT INTO favorite_shop (id_client, id_shop) VALUES(?, ?)', [idClient, idShop], (err, result) => {
+        if (err) {
+            res.status(500).json(err)
+        } else  {
+            res.sendStatus(200)
+        }
+    })
+});
+
+//DELETE a favorite shop for one client
+router.delete('/:idClient/favorites/shops/:idShop', (req, res) => {
+    const { idClient, idShop } = req.params
+    connection.query('DELETE FROM favorite_shop WHERE id_client = ? AND id_shop = ?', [idClient, idShop], (err, result) => {
+        if (err) {
+            res.status(500).json(err)
+        } else  {
+            res.sendStatus(200)
+        }
+    })
 })
 
 module.exports = router
