@@ -36,7 +36,25 @@ router.get('/', (req, res) => {
                 res.json(result)
             }
         })
-    }else {
+    } else if (req.query.city) {
+        //Get all products from one city
+        connection.query('SELECT * FROM product AS p JOIN shop AS s ON p.id_shop = s.id JOIN shop_city AS sc ON s.id = sc.id_city JOIN city ON sc.id_city = city.id WHERE city.name_city = ?', [req.query.city], (err, result) => {
+            if (err) {
+                res.status(500).json(err)
+            } else {
+                res.json(result)
+            }
+        })
+    } else if (req.query.country) {
+        //Get all products from one country
+        connection.query('SELECT * FROM product AS p JOIN shop AS s ON p.id_shop = s.id JOIN shop_country AS sc ON s.id = sc.id_country JOIN country ON sc.id_country = country.id WHERE country.name = ? ', [req.query.country], (err, result) => {
+            if (err) {
+                res.status(500).json(err)
+            } else {
+                res.json(result)
+            }
+        })
+    } else {
         //GET all products
         connection.query('SELECT * FROM product', (err, result) => {
             if (err) {
@@ -61,7 +79,7 @@ router.get('/:id', (req, res) => {
     })
 })
 
-//Récupère la catégorie d'un produit selon son ID
+//Get category product with it's id
 router.get('/:idProduct/categories', (req, res) => {
     connection.query('SELECT c.type FROM category AS c JOIN product AS p ON p.id_category = c.id WHERE c.id = ?',req.params.idProduct, (err, result) => {
         if (err) {
@@ -72,7 +90,7 @@ router.get('/:idProduct/categories', (req, res) => {
     })
 })
 
-//Récupère le theme d'un produit selon son ID
+//Get theme product with it's id
 router.get('/:idProduct/themes', (req, res) => {
     connection.query('SELECT t.name FROM theme AS t JOIN product AS p ON p.id_theme = t.id WHERE t.id = ?',req.params.idProduct, (err, result) => {
         if (err) {
@@ -83,6 +101,28 @@ router.get('/:idProduct/themes', (req, res) => {
     })
 })
 
+//Get customization product with it's id
+router.get('/:idProduct/customizations', (req, res) => {
+    connection.query('SELECT * FROM customization AS c JOIN theme AS t ON c.id = t.id_customization JOIN product AS p ON p.id_theme = t.id WHERE p.id = ?',req.params.idProduct, (err, result) => {
+        if (err) {
+            res.status(500).json(err)
+        } else {
+            res.json(result)
+        }
+    })
+});
+
+//Get all tags product with it's id
+router.get('/:idProduct/tags', (req, res) => {
+    connection.query('SELECT * FROM tag AS t JOIN product_tag AS pt ON t.id = pt.id_tag JOIN product AS p ON p.id = pt.id_product WHERE p.id = ?',req.params.idProduct, (err, result) => {
+        if (err) {
+            res.status(500).json(err)
+        } else {
+            res.json(result)
+        }
+    })
+});
+
 //POST a new product
 router.post('/', (req, res) => {
     connection.query('INSERT INTO product SET ?',req.body, (err, result) => {
@@ -92,7 +132,19 @@ router.post('/', (req, res) => {
             res.sendStatus(200)
         }
     })
-})
+});
+
+// POST one product with one tag
+router.post('/:idProduct/tags/:idTag', (req, res) => {
+    const { idProduct, idTag } = req.params;
+    connection.query('INSERT INTO product_tag (id_tag, id_product) VALUES(?, ?)', [idTag, idProduct], (err, result) => {
+        if (err) {
+            res.status(500).json('Error adding a new product');
+        } else {
+            res.sendStatus(200);
+        }
+    })
+});
 
 // PUT one product with it's ID
 router.put('/:id', (req, res) => {
@@ -111,7 +163,7 @@ router.put('/:id', (req, res) => {
     })
 })
 
-// DELETE on product with it's ID
+// DELETE one product with it's ID
 router.delete('/:id', (req, res) => {
     connection.query('DELETE FROM product WHERE id = ?', [req.params.id], (err, result) => {
         if (err) {
@@ -120,7 +172,18 @@ router.delete('/:id', (req, res) => {
             res.sendStatus(200)
         }
     })
-})
+});
 
+// DELETE one tag product with it's ID
+router.delete('/:idProduct/tags/:idTag', (req, res) => {
+    const { idProduct, idTag } = req.params;
+    connection.query('DELETE FROM product_tag WHERE id_product = ? AND id_tag = ?', [idProduct, idTag], (err, result) => {
+        if (err) {
+            res.status(500).json(err)
+        } else {
+            res.sendStatus(200)
+        }
+    })
+});
 
 module.exports = router;
