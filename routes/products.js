@@ -88,7 +88,7 @@ router.get('/:idProduct/categories', (req, res) => {
             res.json(result)
         }
     })
-})
+});
 
 //Get theme product with it's id
 router.get('/:idProduct/themes', (req, res) => {
