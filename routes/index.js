@@ -5,16 +5,17 @@ const clients = require('./clients');
 const tags = require('./tags');
 const products = require('./products');
 const customizations = require('./customizations');
-const shops = require('./shops')
+const shops = require('./shops');
 const fonts = require('./fonts');
 const countries = require('./countries');
 const categories = require('./categories');
 const orders = require('./orders');
 const events =require('./events');
-const auth =require('./auth');
+const auth = require('./auth');
 const colors = require('./colors');
 const themes = require('./themes');
 const adminShop = require('./adminShop');
+const cities = require('./cities');
 
 const router = express.Router();
 
@@ -32,5 +33,6 @@ router.use('/auth', auth);
 router.use('/colors', colors);
 router.use('/themes', themes);
 router.use('/admin', adminShop);
+router.use('/cities', cities);
 
 module.exports = router;

@@ -15,6 +15,20 @@ router.get('/', (req, res) => {
     });
 });
 
+// get product order on the month 
+router.get('/products', (req, res) => {
+    connection.query('SELECT * FROM product AS p JOIN `order` AS o ON p.id_order = o.id WHERE MONTH(o.createDate) = MONTH(NOW())', (err, results) =>  {
+        if(err){
+            res.status(500).send('erreur')
+        }
+        if (results.length === 0) {
+            res.status(404).send('produits non trouvés')
+        } else {
+            res.json(results);
+        }
+    })
+});
+
 // get one order
 router.get('/:id', (req, res) => {
     const oneOrder = req.params.id;
