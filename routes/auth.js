@@ -120,11 +120,11 @@ router.post('/login', (req, res) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            const isSame = bcrypt.compare(req.body.password, user[0].password)
+            const isSame = bcrypt.compare(formData.password, user[0].password)
             if (!isSame) {
                 res.status(500).send('Wrong password')
             } else {
-                jwt.sign({ user }, 'secretkey', (err, token) => {
+                jwt.sign({ user }, process.env.SECRET_KEY, (err, token) => {
                     res.json({ token })
                 })
             }
@@ -143,11 +143,11 @@ router.post('/login/admin', (req, res) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            const isSame = bcrypt.compare(req.body.password, user[0].password)
+            const isSame = bcrypt.compare(formData.password, user[0].password)
             if (!isSame) {
                 res.status(500).send('Wrong password')
             } else {
-                jwt.sign({ user }, 'secretkey', (err, token) => {
+                jwt.sign({ user }, process.env.SECRET_KEY, (err, token) => {
                     res.json({ token })
                 })
             }
@@ -166,11 +166,11 @@ router.post('/login/superadmin', (req, res) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            const isSame = bcrypt.compare(req.body.password, user[0].password)
+            const isSame = bcrypt.compare(formData.password, user[0].password)
             if (!isSame) {
                 res.status(500).send('Wrong password')
             } else {
-                jwt.sign({ user }, 'secretkey', (err, token) => {
+                jwt.sign({ user }, process.env.SECRET_KEY, (err, token) => {
                     res.json({ token })
                 })
             }
@@ -179,7 +179,7 @@ router.post('/login/superadmin', (req, res) => {
 });
 
 router.post('/profile', verifyToken, (req, res) => {
-    jwt.verify(req.token, "secretkey", (err, authdata) => {
+    jwt.verify(req.token, process.env.SECRET_KEY, (err, authdata) => {
         if (err) {
             res.status(403).send(err)
         } else {

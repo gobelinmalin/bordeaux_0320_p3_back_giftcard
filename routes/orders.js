@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
 router.get('/products', (req, res) => {
     connection.query('SELECT * FROM product AS p JOIN `order` AS o ON p.id_order = o.id WHERE MONTH(o.createDate) = MONTH(NOW())', (err, results) =>  {
         if(err){
-            res.status(500).send('erreur')
+            res.status(500).send('Erreur lors de la récupération des produits commandés dans le mois')
         }
         if (results.length === 0) {
             res.status(404).send('produits non trouvés')
@@ -50,7 +50,6 @@ router.post('/', (req, res) => {
     const addOrder = req.body;
     connection.query('INSERT INTO `order` SET ?', addOrder, (err, results) => {
         if(err) {
-            console.log(err);
             res.status(500).send('Erreur lors de la sauvegarde de la commande');
         } else {
             res.sendStatus(200);
@@ -64,7 +63,6 @@ router.put('/:id', (req, res) => {
     const formData = req.body;
     connection.query('UPDATE `order` SET ? WHERE id = ?', [formData, idOrder], err => {
         if(err) {
-            console.log(err);
             res.status(500).send(`Erreur lors de la modification de la commande ${idOrder}`);
         } else {
             res.sendStatus(200);
@@ -77,7 +75,6 @@ router.delete('/:id', (req, res) => {
     const idOrder = req.params.id;
     connection.query('DELETE FROM `order` WHERE id = ?', [idOrder], err => {
         if (err) {
-            console.log(err);
             res.status(500).send('Erreur lors de la suppression de la commande')
         } else {
             res.sendStatus(200);

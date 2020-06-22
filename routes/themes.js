@@ -4,7 +4,6 @@ const router = express.Router();
 
 // GET all themes;
 router.get('/', (req, res) => {
-
     connection.query('SELECT * FROM theme', (err, result) => {
         if (err) {
             res.status(500).json('Erreur lors de la récupération des thèmes')
@@ -16,8 +15,8 @@ router.get('/', (req, res) => {
 
 // POST one theme;
 router.post('/', (req, res) => {
-
-    connection.query('INSERT INTO theme SET ?', req.body, (err, result) => {
+    const formBody = req.body;
+    connection.query('INSERT INTO theme SET ?', formBody, (err, result) => {
         if (err) {
             res.status(500).json('Erreur lors de l\'insertion d\'un thème')
         } else {
@@ -29,8 +28,8 @@ router.post('/', (req, res) => {
 // PUT one theme;
 router.put('/:id', (req, res) => {
 
-    const { body } = req
-    const { id } = req.params
+    const { body } = req;
+    const { id } = req.params;
 
     connection.query('UPDATE theme SET ? WHERE id = ?', [body, id], (err, result) => {
         if (err) {
@@ -43,7 +42,7 @@ router.put('/:id', (req, res) => {
 
 // DELETE one theme with it's ID.
 router.delete('/:id', (req, res) => {
-    const { id } = req.params
+    const { id } = req.params;
     connection.query('DELETE FROM theme WHERE id = ?', id, (err, result) => {
         if (err) {
             res.status(500).json('Erreur lors de la suppression du thème')
