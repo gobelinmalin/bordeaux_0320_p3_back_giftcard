@@ -17,7 +17,7 @@ router.post('/signup', [
     if(!errors.isEmpty()) {
         return res.status(422).json({errors: errors.array()})
     }
-    const hash = bcrypt.hash(req.body.password, 10);
+    const hash = bcrypt.hashSync(req.body.password, 10);
     const formData = {
         firstname: req.body.firstname,
         lastname: req.body.lastname,
