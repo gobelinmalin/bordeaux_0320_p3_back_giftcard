@@ -17,7 +17,7 @@ router.post('/signup', [
     if(!errors.isEmpty()) {
         return res.status(422).json({errors: errors.array()})
     }
-    const hash = bcrypt.hash(req.body.password, 10);
+    const hash = bcrypt.hashSync(req.body.password, 10);
     const formData = {
         firstname: req.body.firstname,
         lastname: req.body.lastname,
@@ -120,7 +120,7 @@ router.post('/login', (req, res) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            const isSame = bcrypt.compare(formData.password, user[0].password)
+            const isSame = bcrypt.compareSync(formData.password, user[0].password)
             if (!isSame) {
                 res.status(500).send('Wrong password')
             } else {
@@ -143,7 +143,7 @@ router.post('/login/admin', (req, res) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            const isSame = bcrypt.compare(formData.password, user[0].password)
+            const isSame = bcrypt.compareSync(formData.password, user[0].password)
             if (!isSame) {
                 res.status(500).send('Wrong password')
             } else {
@@ -166,7 +166,7 @@ router.post('/login/superadmin', (req, res) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            const isSame = bcrypt.compare(formData.password, user[0].password)
+            const isSame = bcrypt.compareSync(formData.password, user[0].password)
             if (!isSame) {
                 res.status(500).send('Wrong password')
             } else {
@@ -194,7 +194,6 @@ router.post('/profile', verifyToken, (req, res) => {
 
 function verifyToken(req, res, next) {
     const bearerHeader = req.headers["authorization"]
-
     if (typeof bearerHeader !== 'undefined') {
         const bearer = bearerHeader.split(' ')
         const bearerToken = bearer[1];
