@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
     connection.query('SELECT * FROM color', (err, result) => {
         if(err) {
-            res.status(500).json(err);
+            res.status(500).json('Erreur lors de la récupération de toutes les couleurs');
         } else {
             res.status(200).json(result);
         }
@@ -20,7 +20,7 @@ router.get('/:id', (req, res) => {
 
     connection.query('SELECT * FROM color WHERE id = ?', [id], (err, result) => {
         if(err) {
-            res.status(500).send(err);
+            res.status(500).send("Erreur lors de la récupération d\'une couleur");
         } else if (result.length === 0) {
             res.status(400).send('bad id : color doesn\'t exist')
         } else {
@@ -35,7 +35,7 @@ router.post('/', (req,res) => {
     
     connection.query('INSERT INTO color SET ?', [formData], (err, result) => {
         if (err) {
-            res.status(500).json(err);
+            res.status(500).json('Erreur lors de la création d\'une nouvelle couleur');
         } else {
             res.status(200).send('color added');
         }
@@ -49,7 +49,7 @@ router.put('/:id', (req, res) => {
 
     connection.query('UPDATE color SET ? WHERE id = ?', [formData, id], (err) => {
         if(err) {
-            res.status(500).json(err)
+            res.status(500).json('Erreur lors de la modification d\'une couleur')
         } else {
             res.status(200).send('color updated')
         }
@@ -62,7 +62,7 @@ router.delete('/:id', (req, res) => {
 
     connection.query('DELETE FROM color WHERE id = ?', [idColor], (err, result) => {
         if(err) {
-            res.status(500).json(err);
+            res.status(500).json("Erreur lors de la suppression d\'une couleur");
         } else {
             res.status(200).json('color deleted')
         }

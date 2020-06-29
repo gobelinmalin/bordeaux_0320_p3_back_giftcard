@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
     connection.query('SELECT * FROM adminshop', (err, result) => {
         if (err) {
-            res.status(500).send(err);
+            res.status(500).send('Erreur lors de la récupération de tous les comptes enseignes');
         } else {
             res.json(result);
         }
@@ -18,7 +18,7 @@ router.post('/', (req, res) => {
     const formData = req.body
     connection.query('INSERT INTO adminshop set ?', [formData], (err, result) => {
         if (err) {
-            res.status(500).send(err);
+            res.status(500).send('Erreur lors de la création d\'un nouveau compte enseigne');
         } else {
             res.sendStatus(200);
         }
@@ -31,7 +31,7 @@ router.put('/:id', (req, res) => {
     const idAdmin = req.params.id;
     connection.query('UPDATE adminshop SET ? WHERE id = ?', [body, idAdmin], (err, results) => {
         if(err) {
-            res.status(500).send(err);
+            res.status(500).send('Erreur lors de la modification d\'un compte enseigne');
         } else {
             return res.status(200).json(results);
         }
@@ -43,7 +43,7 @@ router.delete('/:id', (req, res) => {
     const idAdmin = req.params.id;
     connection.query('DELETE FROM adminshop WHERE id = ?', idAdmin, (err, result) => {
         if (err) {
-            res.status(500).send(err);
+            res.status(500).send('Erreur lors de la suppression d\'un compte enseigne');
         } else {
             res.sendStatus(200);
         }
