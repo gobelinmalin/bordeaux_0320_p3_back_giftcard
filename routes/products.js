@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
     if (req.query.shop) {
         //Get all products from one shop name
-        connection.query('SELECT p.*, s.name as shopname FROM product AS p JOIN shop AS s ON p.id_shop = shopid WHERE shopid = ?', [req.query.shop], (err, result) => {
+        connection.query('SELECT p.*, s.name as shopname FROM product AS p JOIN shop AS s ON p.id_shop = shopid WHERE s.id = ?', [req.query.shop], (err, result) => {
             if (err) {
                 res.status(500).json(err)
             } else {
