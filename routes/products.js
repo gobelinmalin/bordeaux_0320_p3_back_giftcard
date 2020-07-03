@@ -79,10 +79,9 @@ router.get('/', (req, res) => {
     }
 })
 
-//GET all product by their format (ecard AS '0' or realcard AS '1',)
-router.get('/format/:boolean', (req, res) => {
-    const boolean = req.params.boolean
-    connection.query('SELECT * FROM product WHERE format = ?',[boolean], (err, result) => {
+// Get all product where eCard = 1
+router.get('/eCard', (req, res) => {
+    connection.query('SELECT * FROM product WHERE eCard = 1', (err, result) => {
         if (err) {
             res.status(500).json(err)
         } else {
@@ -90,6 +89,18 @@ router.get('/format/:boolean', (req, res) => {
         }
     })
 })
+
+// Get all product where realCard = 1
+router.get('/realCard', (req, res) => {
+    connection.query('SELECT * FROM product WHERE realCard = 1', (err, result) => {
+        if (err) {
+            res.status(500).json(err)
+        } else {
+            res.json(result)
+        }
+    })
+})
+
 //Get a product by its id
 router.get('/:id', (req, res) => {
     connection.query('SELECT * FROM product WHERE id = ?',[req.params.id], (err, result) => {
