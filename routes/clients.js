@@ -35,7 +35,7 @@ router.get('/:id', (req, res) => {
 // GET all orders of one client
 router.get('/:idClient/orders', (req, res) => {
     const { idClient } = req.params;
-    const sql = 'SELECT * FROM `order` AS o LEFT JOIN `client` AS c ON c.id = o.id_client WHERE c.id = ?';
+    const sql = 'SELECT * FROM `order` AS o RIGHT JOIN `client` AS c ON c.id = o.id_client WHERE c.id = ?';
 
     connection.query(sql, idClient, (err, results) => {
 

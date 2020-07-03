@@ -31,7 +31,7 @@ router.get('/', (req, res) => {
         // get all shops
         connection.query('SELECT * FROM shop', (err, result) => {
             if (err) {
-                res.status(500).send('Error retrieving shops')
+                res.status(500).json('Error retrieving shops')
             } else {
                 res.status(200).send(result)
             }

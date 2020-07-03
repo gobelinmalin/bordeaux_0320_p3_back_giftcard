@@ -19,13 +19,18 @@ router.post('/signup', [
     }
     const hash = bcrypt.hashSync(req.body.password, 10);
     const formData = {
+        civility: req.body.civility,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         email: req.body.email,
         password: hash,
         address: req.body.address,
+        zipcode: req.body.zipcode,
+        city: req.body.city,
+        country: req.body.country,
         phone: req.body.phone,
-        birthdate: req.body.birthdate
+        birthdate: req.body.birthdate,
+        createProfil: req.body.createProfil,
     };
     connection.query('SELECT * FROM client WHERE email = ?', [formData.email], (err, result) => {
         if (result.length === 0) {
@@ -58,7 +63,14 @@ router.post('/signup/admin', [
     const formData = {
         email: req.body.email,
         password: hash,
-        id_shop: req.body.id_shop
+        id_shop: req.body.id_shop,
+        createDate: req.body.createDate,
+        contactPerson: req.body.contactPerson,
+        headOfficeAddress: req.body.headOfficeAddress,
+        headOfficeZipcode: req.body.headOfficeZipcode,
+        headOfficeCity: req.body.headOfficeCity,
+        headOfficeCountry: req.body.headOfficeCountry,
+        phone: req.body.phone,
     };
     connection.query('SELECT * FROM adminshop WHERE email = ?', [formData.email], (err, result) => {
         if (result.length === 0) {
