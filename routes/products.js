@@ -18,8 +18,10 @@ router.get('/', (req, res) => {
 
     } else if (req.query.theme) {
 
+
+
         //Get all products from one theme
-        connection.query('SELECT * FROM product AS p JOIN theme AS t ON p.id_theme = t.id WHERE t.name = ?', [req.query.theme], (err, result) => {
+        connection.query('SELECT p.* FROM product AS p JOIN theme AS t ON p.id_theme = t.id WHERE t.name = ?', [req.query.theme], (err, result) => {
             if (err) {
                 res.status(500).json(err)
             } else {
@@ -36,7 +38,16 @@ router.get('/', (req, res) => {
                 res.json(result)
             }
         })
-    } else if (req.query.city) {
+    } else if (req.query.tag){
+        //Get all the products from one tag
+        connection.query('SELECT p.* FROM product AS p JOIN product_tag AS pt ON p.id = pt.id_product JOIN tag as t ON t.id = pt.id_tag WHERE t.name = ?', [req.query.tag], (err, result) => {
+            if (err) {
+                res.status(500).json(err)
+            } else {
+                res.json(result)
+            }
+        })   
+    }else if (req.query.city) {
         //Get all products from one city
         connection.query('SELECT * FROM product AS p JOIN shop AS s ON p.id_shop = s.id JOIN shop_city AS sc ON s.id = sc.id_city JOIN city ON sc.id_city = city.id WHERE city.name_city = ?', [req.query.city], (err, result) => {
             if (err) {
@@ -56,6 +67,7 @@ router.get('/', (req, res) => {
         })
     } else {
         //GET all products
+        console.log('passed')
         connection.query('SELECT * FROM product', (err, result) => {
             if (err) {
                 res.status(500).json(err)
@@ -68,9 +80,32 @@ router.get('/', (req, res) => {
     }
 })
 
+//GET all product by their format (ecard AS '0' or realcard AS '1',)
+router.get('/format/:boolean', (req, res) => {
+    const boolean = req.params.boolean
+    connection.query('SELECT * FROM product WHERE format = ?',[boolean], (err, result) => {
+        if (err) {
+            res.status(500).json(err)
+        } else {
+            res.json(result)
+        }
+    })
+})
 //Get a product by its id
 router.get('/:id', (req, res) => {
     connection.query('SELECT * FROM product WHERE id = ?',[req.params.id], (err, result) => {
+        if (err) {
+            res.status(500).json(err)
+        } else {
+            res.json(result)
+        }
+    })
+})
+
+//Get all products with their tags
+router.get('/tags', (req, res) => {
+    console.log('passed2')
+    connection.query('SELECT * FROM product as p LEFT JOIN product_tag AS pt ON p.id = pt.id_product RIGHT JOIN tag AS t ON t.id = pt.id_tag', (err, result) => {
         if (err) {
             res.status(500).json(err)
         } else {
