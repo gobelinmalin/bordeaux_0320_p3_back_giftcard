@@ -66,6 +66,11 @@ router.post('/signup/admin', [
         id_shop: req.body.id_shop,
         createDate: req.body.createDate,
         contactPerson: req.body.contactPerson,
+        headOfficeAddress: req.body.headOfficeAddress,
+        headOfficeZipcode: req.body.headOfficeZipcode,
+        headOfficeCity: req.body.headOfficeCity,
+        headOfficeCountry: req.body.headOfficeCountry,
+        phone: req.body.phone,
     };
     connection.query('SELECT * FROM adminshop WHERE email = ?', [formData.email], (err, result) => {
         if (result.length === 0) {
