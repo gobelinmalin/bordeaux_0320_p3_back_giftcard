@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
     if (req.query.shop) {
         //Get all products from one shop name
-        connection.query('SELECT p.*, s.name as shopname FROM product AS p JOIN shop AS s ON p.id_shop = shopid WHERE shopid = ?', [req.query.shop], (err, result) => {
+        connection.query('SELECT p.*, s.name as shopname FROM product AS p JOIN shop AS s ON p.id_shop = s.id WHERE s.id = ?', [req.query.shop], (err, result) => {
             if (err) {
                 res.status(500).json(err)
             } else {
@@ -67,7 +67,6 @@ router.get('/', (req, res) => {
         })
     } else {
         //GET all products
-        console.log('passed')
         connection.query('SELECT * FROM product', (err, result) => {
             if (err) {
                 res.status(500).json('Erreur lors de la récupération de tous les produits')
@@ -104,7 +103,6 @@ router.get('/:id', (req, res) => {
 
 //Get all products with their tags
 router.get('/tags', (req, res) => {
-    console.log('passed2')
     connection.query('SELECT * FROM product as p LEFT JOIN product_tag AS pt ON p.id = pt.id_product RIGHT JOIN tag AS t ON t.id = pt.id_tag', (err, result) => {
         if (err) {
             res.status(500).json(err)
