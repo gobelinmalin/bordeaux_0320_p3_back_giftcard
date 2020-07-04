@@ -33,7 +33,7 @@ router.get("/:id", (req, res) => {
 // GET all orders of one client
 router.get('/:idClient/orders', (req, res) => {
     const { idClient } = req.params;
-    const sql = 'SELECT * FROM `order` AS o RIGHT JOIN `client` AS c ON c.id = o.id_client WHERE c.id = ?';
+    const sql = 'SELECT o.*, c.id AS clientid FROM `order` AS o JOIN `client` AS c ON c.id = o.id_client WHERE c.id = ?';
 
     connection.query(sql, idClient, (err, results) => {
 
@@ -65,9 +65,9 @@ router.get("/:idClient/orders/:idOrder", (req, res) => {
 router.get("/:idClient/orders/:idOrder/products", (req, res) => {
   const { idClient, idOrder } = req.params;
   const sql =
-    "SELECT o.id AS commande_nb , c.firstname , c.lastname , p.name as product FROM `product` p JOIN product_order po ON p.id = po.id_product JOIN `order` o ON o.id = po.id_order JOIN client c ON c.id = o.id_client WHERE o.id = ? AND c.id = ?";
+    "SELECT o.id AS commande_nb , c.firstname , c.lastname , p.* FROM product p JOIN `order` o ON o.id = p.id_order JOIN client c ON c.id = o.id_client WHERE o.id = ? AND c.id = ?";
 
-  connection.query(sql, [idClient, idOrder], (err, results) => {
+  connection.query(sql, [idOrder, idClient], (err, results) => {
     if (err) {
       res.status(500).json("Erreur lors de la récupération de tous les produits d'une commande d'un client");
     } else if (results.length === 0) {
