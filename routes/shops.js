@@ -40,10 +40,10 @@ router.get('/', (req, res) => {
 });
 
 //GET shop by ID
-router.get('/:id', (req, res) => {
-    const { id } = req.params;
+router.get('/:idShop', (req, res) => {
+    const { idShop } = req.params;
 
-    connection.query('SELECT * FROM shop WHERE id = ?', [id], (err, result) => {
+    connection.query('SELECT * FROM shop WHERE id = ?', [idShop], (err, result) => {
         if (err) {
             res.status(500).send('Error retrieving id selected shop')
         } else if (result.length === 0) {
@@ -139,11 +139,11 @@ router.post('/:idShop/tags/:idTag', (req, res) => {
 });
 
 // UPDATE a shop by its ID
-router.put('/:id', (req,res) => {
+router.put('/:idShop', (req,res) => {
     const formData = req.body;
-    const { id } = req.params;
+    const { idShop } = req.params;
 
-    connection.query('UPDATE shop SET ? WHERE id = ?', [formData, id], (err) => {
+    connection.query('UPDATE shop SET ? WHERE id = ?', [formData, idShop], (err) => {
         if(err) {
             res.status(500).json('Error updating a shop')
         } else {
@@ -154,8 +154,9 @@ router.put('/:id', (req,res) => {
 
 
 // DELETE a shop
-router.delete('/:id', (req, res) => {
+router.delete('/:idShop', (req, res) => {
     const { idShop } = req.params;
+    console.log(idShop)
 
     connection.query('DELETE FROM shop WHERE id = ?', [idShop] ,(err, result) => {
         if (err) {
