@@ -78,6 +78,23 @@ router.get("/:idClient/orders/:idOrder/products", (req, res) => {
   });
 });
 
+// GET all products of one order of one client with delivery
+router.get("/:idClient/orders/:idOrder/deliveries/products", (req, res) => {
+  const { idClient, idOrder } = req.params;
+  const sql =
+    "SELECT o.delivery_date, o.createDate, o.id, p.name, p.credit, p.eCard, p.realCard, p.status, d.address, d.zipcode, d.city, d.country, d.mail FROM `order` AS O JOIN client AS c ON c.id = o.id_client JOIN delivery AS d ON o.id_delivery = d.id JOIN product AS p ON o.id = p.id_order WHERE o.id = ? AND c.id = ?";
+
+  connection.query(sql, [idOrder, idClient], (err, results) => {
+    if (err) {
+      res.status(500).json("Erreur lors de la récupération de toutes les informations d'une commande liée à un client");
+    } else if (results.length === 0) {
+      res.status(400).send(" Il n'y aucune information dans la commande");
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
 // GET one product of one order of one client
 router.get("/:idClient/orders/:idOrder/products/:idProduct", (req, res) => {
   const { idClient, idOrder, idProduct } = req.params;
