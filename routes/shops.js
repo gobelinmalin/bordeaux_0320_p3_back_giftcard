@@ -81,7 +81,7 @@ router.get('/:idShop/tags', (req, res) => {
 
 //Get all cities of one shop with it's id
 router.get('/:idShop/cities', (req, res) => {
-    connection.query('SELECT * FROM city AS c JOIN shop_city AS sc ON c.id = sc.id_city JOIN shop AS s ON s.id = sc.id_shop WHERE s.id = ?',req.params.idProduct, (err, result) => {
+    connection.query('SELECT * FROM city AS c JOIN shop_city AS sc ON c.id = sc.id_city JOIN shop AS s ON s.id = sc.id_shop WHERE s.id = ?',req.params.idShop, (err, result) => {
         if (err) {
             res.status(500).json('Erreur lors de la récupération des villes liées à une enseigne')
         } else {
