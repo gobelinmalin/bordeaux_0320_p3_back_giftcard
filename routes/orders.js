@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 
 // get product order on the month 
 router.get('/products', (req, res) => {
-    connection.query('SELECT * FROM product AS p JOIN `order` AS o ON p.id_order = o.id WHERE MONTH(o.createDate) = MONTH(NOW())', (err, results) =>  {
+    connection.query('SELECT * FROM product AS p JOIN card AS c ON p.id = c.id_product JOIN `order` AS o ON c.id_order = o.id WHERE MONTH(o.createDate) = MONTH(NOW())', (err, results) =>  {
         if(err){
             res.status(500).send('Erreur lors de la récupération des produits commandés dans le mois')
         }
