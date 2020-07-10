@@ -58,7 +58,7 @@ router.get('/:idShop', (req, res) => {
 router.get('/:idShop/products/:idProduct', (req, res) => {
     const { idShop, idProduct } = req.params;
     
-    // 'SELECT * FROM product AS p JOIN shop AS s ON p.id_shop = s.id WHERE s.id = ? AND p.id = ?'
+    // 'SELECT p.*, c.* FROM card AS c JOIN product AS p ON p.id = c.id_product JOIN shop AS s ON p.id_shop = s.id WHERE s.id = ? AND p.id = ?'
     connection.query('SELECT * FROM product WHERE id_shop = ? AND id = ?', [idShop, idProduct], (err, result) => {
         if (err) {
             res.status(500).json('Error retrieve a product from a shop');
@@ -156,7 +156,6 @@ router.put('/:idShop', (req,res) => {
 // DELETE a shop
 router.delete('/:idShop', (req, res) => {
     const { idShop } = req.params;
-    console.log(idShop)
 
     connection.query('DELETE FROM shop WHERE id = ?', [idShop] ,(err, result) => {
         if (err) {

@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
     if (req.query.shop) {
         //Get all products from one shop name
-        connection.query('SELECT p.*, s.name as shopname FROM product AS p JOIN shop AS s ON p.id_shop = s.id WHERE s.id = ?', [req.query.shop], (err, result) => {
+        connection.query('SELECT p.*, c.*, s.name as shopname FROM product AS p JOIN shop AS s ON p.id_shop = s.id JOIN card AS c ON p.id = c.id_product WHERE s.id = ?', [req.query.shop], (err, result) => {
             if (err) {
                 res.status(500).json(err)
             } else {
@@ -18,10 +18,8 @@ router.get('/', (req, res) => {
 
     } else if (req.query.theme) {
 
-
-
         //Get all products from one theme
-        connection.query('SELECT p.* FROM product AS p JOIN theme AS t ON p.id_theme = t.id WHERE t.name = ?', [req.query.theme], (err, result) => {
+        connection.query('SELECT p.*,  c.* FROM card AS c JOIN product AS p ON p.id = c.id_product JOIN theme AS t ON p.id_theme = t.id WHERE t.name = ?', [req.query.theme], (err, result) => {
             if (err) {
                 res.status(500).json('Erreur lors de la récupération de tous les produits selon un thème')
             } else {
@@ -31,7 +29,7 @@ router.get('/', (req, res) => {
 
     } else if (req.query.category) {
         //Get all products from one category
-        connection.query('SELECT * FROM product AS p JOIN category AS c ON p.id_category = c.id WHERE c.type = ?', [req.query.category], (err, result) => {
+        connection.query('SELECT p.*, ca.* FROM card AS ca JOIN product AS p ON p.id = ca.id_product JOIN category AS c ON p.id_category = c.id WHERE c.type = ?', [req.query.category], (err, result) => {
             if (err) {
                 res.status(500).json('Erreur lors de la récupération de tous les produits selon une catégorie')
             } else {
@@ -40,16 +38,16 @@ router.get('/', (req, res) => {
         })
     } else if (req.query.tag){
         //Get all the products from one tag
-        connection.query('SELECT p.* FROM product AS p JOIN product_tag AS pt ON p.id = pt.id_product JOIN tag as t ON t.id = pt.id_tag WHERE t.name = ?', [req.query.tag], (err, result) => {
+        connection.query('SELECT p.*, c.* FROM card AS c JOIN product AS p ON p.id = c.i_product JOIN product_tag AS pt ON p.id = pt.id_product JOIN tag as t ON t.id = pt.id_tag WHERE t.name = ?', [req.query.tag], (err, result) => {
             if (err) {
                 res.status(500).json(err)
             } else {
                 res.json(result)
             }
-        })   
+        })
     }else if (req.query.city) {
         //Get all products from one city
-        connection.query('SELECT * FROM product AS p JOIN shop AS s ON p.id_shop = s.id JOIN shop_city AS sc ON s.id = sc.id_city JOIN city ON sc.id_city = city.id WHERE city.name_city = ?', [req.query.city], (err, result) => {
+        connection.query('SELECT p.*, c.* FROM card AS c JOIN product AS p ON p.id = c.id_product JOIN shop AS s ON p.id_shop = s.id JOIN shop_city AS sc ON s.id = sc.id_city JOIN city ON sc.id_city = city.id WHERE city.name_city = ?', [req.query.city], (err, result) => {
             if (err) {
                 res.status(500).json('Erreur lors de la récupération de tous les produits selon une ville')
             } else {
@@ -58,7 +56,7 @@ router.get('/', (req, res) => {
         })
     } else if (req.query.country) {
         //Get all products from one country
-        connection.query('SELECT * FROM product AS p JOIN shop AS s ON p.id_shop = s.id JOIN shop_country AS sc ON s.id = sc.id_country JOIN country ON sc.id_country = country.id WHERE country.name = ? ', [req.query.country], (err, result) => {
+        connection.query('SELECT p.*, c.* FROM card AS c JOIN product AS p ON p.id = c.id_product JOIN shop AS s ON p.id_shop = s.id JOIN shop_country AS sc ON s.id = sc.id_country JOIN country ON sc.id_country = country.id WHERE country.name = ? ', [req.query.country], (err, result) => {
             if (err) {
                 res.status(500).json('Erreur lors de la récupération de tous les produits selon un pays')
             } else {
@@ -73,15 +71,24 @@ router.get('/', (req, res) => {
             } else {
                 res.json(result)
             }
-
-
         })
     }
 })
 
-// Get all product where eCard = 1
+// get all info products + cards
+router.get('/cards', (req, res) => {
+    connection.query('SELECT p.*, c.* FROM product AS p JOIN card AS c ON p.id = c.id_product', (err, result) => {
+        if (err) {
+            res.status(500).json('Erreur lors de la récupération de tous les produits')
+        } else {
+            res.json(result)
+        }
+    })
+})
+
+// Get all ecards where format = 1 (e-card)
 router.get('/eCard', (req, res) => {
-    connection.query('SELECT * FROM product WHERE eCard = 1', (err, result) => {
+    connection.query('SELECT * FROM card WHERE format = 1', (err, result) => {
         if (err) {
             res.status(500).json(err)
         } else {
@@ -90,9 +97,9 @@ router.get('/eCard', (req, res) => {
     })
 })
 
-// Get all product where realCard = 1
+// Get all real cards where format = 0 (real card)
 router.get('/realCard', (req, res) => {
-    connection.query('SELECT * FROM product WHERE realCard = 1', (err, result) => {
+    connection.query('SELECT * FROM card WHERE format = 0', (err, result) => {
         if (err) {
             res.status(500).json(err)
         } else {
@@ -103,7 +110,7 @@ router.get('/realCard', (req, res) => {
 
 //Get a product by its id
 router.get('/:id', (req, res) => {
-    connection.query('SELECT * FROM product WHERE id = ?',[req.params.id], (err, result) => {
+    connection.query('SELECT p.*, c.* FROM product AS p JOIN card AS c ON p.id = c.id_product WHERE p.id = ?',[req.params.id], (err, result) => {
         if (err) {
             res.status(500).json('Erreur lors de la récupération de d\'un produit selon son id')
         } else {

@@ -17,6 +17,7 @@ const themes = require('./themes');
 const adminShop = require('./adminShop');
 const cities = require('./cities');
 const deliveries = require('./deliveries');
+const cards = require('./cards');
 
 const router = express.Router();
 
@@ -36,5 +37,6 @@ router.use('/themes', themes);
 router.use('/admin', adminShop);
 router.use('/cities', cities);
 router.use('/deliveries', deliveries);
+router.use('/cards', cards);
 
 module.exports = router;
