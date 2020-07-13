@@ -22,7 +22,8 @@ router.get('/', (req, res) => {
         } else if (result.length ===0) {
             res.status(400).send('No cards for that shop')
         } else {
-            res.status(200).json(result)        }
+            res.status(200).json(result)
+        }
     })
 });
 
