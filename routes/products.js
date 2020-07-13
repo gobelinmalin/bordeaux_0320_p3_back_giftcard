@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
     } else if (req.query.theme) {
 
         //Get all products from one theme
-        connection.query('SELECT p.*,  c.* FROM card AS c JOIN product AS p ON p.id = c.id_product JOIN theme AS t ON p.id_theme = t.id WHERE t.name = ?', [req.query.theme], (err, result) => {
+        connection.query('SELECT p.*, c.id AS idcard, c.creationDate, c.id_product, c.id_order, c.format, c.sale_status, c.credit FROM card AS c JOIN product AS p ON p.id = c.id_product JOIN theme AS t ON p.id_theme = t.id WHERE t.name = ?', [req.query.theme], (err, result) => {
             if (err) {
                 res.status(500).json('Erreur lors de la récupération de tous les produits selon un thème')
             } else {
@@ -38,9 +38,9 @@ router.get('/', (req, res) => {
         })
     } else if (req.query.tag){
         //Get all the products from one tag
-        connection.query('SELECT p.*, c.* FROM card AS c JOIN product AS p ON p.id = c.i_product JOIN product_tag AS pt ON p.id = pt.id_product JOIN tag as t ON t.id = pt.id_tag WHERE t.name = ?', [req.query.tag], (err, result) => {
+        connection.query('SELECT p.*, c.id AS idcard, c.creationDate, c.id_product, c.id_order, c.format, c.sale_status,  c.credit FROM card AS c JOIN product AS p ON p.id = c.id_product JOIN product_tag AS pt ON p.id = pt.id_product JOIN tag as t ON t.id = pt.id_tag WHERE t.name = ?', [req.query.tag], (err, result) => {
             if (err) {
-                res.status(500).json(err)
+                res.status(500).json('Erreur lors de la récupération de tous les produits selon un tag')
             } else {
                 res.json(result)
             }
@@ -77,7 +77,7 @@ router.get('/', (req, res) => {
 
 // get all info products + cards
 router.get('/cards', (req, res) => {
-    connection.query('SELECT p.*, c.* FROM product AS p JOIN card AS c ON p.id = c.id_product', (err, result) => {
+    connection.query('SELECT p.*, c.id AS idcard, c.creationDate, c.id_product, c.id_order, c.format, c.sale_status,  c.credit FROM product AS p JOIN card AS c ON p.id = c.id_product', (err, result) => {
         if (err) {
             res.status(500).json('Erreur lors de la récupération de tous les produits')
         } else {
@@ -88,7 +88,7 @@ router.get('/cards', (req, res) => {
 
 // Get all ecards where format = 1 (e-card)
 router.get('/eCard', (req, res) => {
-    connection.query('SELECT * FROM card WHERE format = 1', (err, result) => {
+    connection.query('SELECT p.*, c.id AS idcard, c.creationDate, c.id_product, c.id_order, c.format, c.sale_status,  c.credit FROM product AS p JOIN card AS c ON p.id = c.id_product WHERE format = 1', (err, result) => {
         if (err) {
             res.status(500).json(err)
         } else {
@@ -99,7 +99,7 @@ router.get('/eCard', (req, res) => {
 
 // Get all real cards where format = 0 (real card)
 router.get('/realCard', (req, res) => {
-    connection.query('SELECT * FROM card WHERE format = 0', (err, result) => {
+    connection.query('SELECT p.*, c.id AS idcard, c.creationDate, c.id_product, c.id_order, c.format, c.sale_status,  c.credit FROM product AS p JOIN card AS c ON p.id = c.id_product WHERE format = 0', (err, result) => {
         if (err) {
             res.status(500).json(err)
         } else {
@@ -110,7 +110,7 @@ router.get('/realCard', (req, res) => {
 
 //Get a product by its id
 router.get('/:id', (req, res) => {
-    connection.query('SELECT p.*, c.* FROM product AS p JOIN card AS c ON p.id = c.id_product WHERE p.id = ?',[req.params.id], (err, result) => {
+    connection.query('SELECT p.*, c.id AS idcard, c.creationDate, c.id_product, c.id_order, c.format, c.sale_status,  c.credit FROM product AS p JOIN card AS c ON p.id = c.id_product WHERE p.id = ?',[req.params.id], (err, result) => {
         if (err) {
             res.status(500).json('Erreur lors de la récupération de d\'un produit selon son id')
         } else {
