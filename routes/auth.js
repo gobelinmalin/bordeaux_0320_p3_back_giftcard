@@ -101,7 +101,7 @@ router.post('/signup/superadmin', [
     }
     const hash = bcrypt.hashSync(req.body.password, 10);
     const formData = {
-        fullname: req.body.fullname,
+        name: req.body.name,
         email: req.body.email,
         password: hash,
     };
