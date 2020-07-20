@@ -7,7 +7,7 @@ var pool = mysql.createPool({
   host: process.env.HEROKU_HOST,
   user: process.env.HEROKU_USER,
   password: process.env.HEROKU_PASSWORD,
-  database: process.env.HEROKU_DATABASE
+  database: process.env.HEROKU_DATABASE,
 });
 module.exports = {
   query: function() {

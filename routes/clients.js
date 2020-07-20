@@ -31,17 +31,18 @@ router.get("/:id", (req, res) => {
 });
 
 // GET all orders of one client
-router.get("/:idClient/orders", (req, res) => {
-  const { idClient } = req.params;
-  const sql = "SELECT * FROM `order` AS o LEFT JOIN `client` AS c ON c.id = o.id_client WHERE c.id = ?";
+router.get('/:idClient/orders', (req, res) => {
+    const { idClient } = req.params;
+    const sql = 'SELECT o.*, c.id AS clientid FROM `order` AS o JOIN `client` AS c ON c.id = o.id_client WHERE c.id = ?';
 
-  connection.query(sql, idClient, (err, results) => {
-    if (err) {
-      res.status(500).json("Erreur lors de la récupération de toutes les commandes d'un client");
-    } else {
-      res.status(200).json({ orders_client: results });
-    }
-  });
+    connection.query(sql, idClient, (err, results) => {
+
+        if (err) {
+            res.status(500).json('Erreur lors de la récupération de toutes les commandes d\'un client')
+        } else {
+            res.status(200).json({ orders_client: results })
+        }
+    })
 });
 
 // GET one order of one client
@@ -64,15 +65,32 @@ router.get("/:idClient/orders/:idOrder", (req, res) => {
 router.get("/:idClient/orders/:idOrder/products", (req, res) => {
   const { idClient, idOrder } = req.params;
   const sql =
-    "SELECT o.id AS commande_nb , c.firstname , c.lastname , p.name as product FROM `product` p JOIN product_order po ON p.id = po.id_product JOIN `order` o ON o.id = po.id_order JOIN client c ON c.id = o.id_client WHERE o.id = ? AND c.id = ?";
+    "SELECT o.id AS commande_nb , c.firstname , c.lastname , p.*, ca.credit, ca.format FROM product AS p JOIN card AS ca ON p.id = ca.id_product JOIN `order` AS o ON o.id = ca.id_order JOIN client AS c ON c.id = o.id_client WHERE o.id = ? AND c.id = ?";
 
-  connection.query(sql, [idClient, idOrder], (err, results) => {
+  connection.query(sql, [idOrder, idClient], (err, results) => {
     if (err) {
       res.status(500).json("Erreur lors de la récupération de tous les produits d'une commande d'un client");
     } else if (results.length === 0) {
       res.status(400).send(" Il n'y aucun produit dans la commande");
     } else {
-      res.status(200).json({ products_order_client: results });
+      res.status(200).json({product_order_client: result});
+    }
+  });
+});
+
+// GET all products of one order of one client with delivery
+router.get("/:idClient/orders/:idOrder/deliveries/products", (req, res) => {
+  const { idClient, idOrder } = req.params;
+  const sql =
+    "SELECT o.delivery_date, o.createDate, o.id, o.status, p.name, ca.credit, ca.format, d.address, d.zipcode, d.city, d.country, d.mail FROM `order` AS O JOIN client AS c ON c.id = o.id_client JOIN delivery AS d ON o.id_delivery = d.id JOIN card AS ca ON o.id = ca.id_order JOIN product AS p ON p.id = ca.id_product WHERE o.id = ? AND c.id = ?";
+
+  connection.query(sql, [idOrder, idClient], (err, results) => {
+    if (err) {
+      res.status(500).json("Erreur lors de la récupération de toutes les informations d'une commande liée à un client");
+    } else if (results.length === 0) {
+      res.status(400).send(" Il n'y aucune information dans la commande");
+    } else {
+      res.status(200).json(results);
     }
   });
 });
@@ -81,9 +99,9 @@ router.get("/:idClient/orders/:idOrder/products", (req, res) => {
 router.get("/:idClient/orders/:idOrder/products/:idProduct", (req, res) => {
   const { idClient, idOrder, idProduct } = req.params;
   const sql =
-    "SELECT o.id AS commande_nb , c.firstname , c.lastname , p.name as product FROM `product` p JOIN product_order po ON p.id = po.id_product JOIN `order` o ON o.id = po.id_order JOIN `client` c ON c.id = o.id_client WHERE o.id = ? AND c.id = ? AND p.id = ?";
+    "SELECT o.id AS commande_nb, c.firstname, c.lastname, p.name FROM `product` p JOIN card ca ON p.id = ca.id_product JOIN `order` o ON o.id = ca.id_order JOIN `client` c ON c.id = o.id_client WHERE o.id = ? AND c.id = ? AND p.id = ?";
 
-  connection.query(sql, [idClient, idOrder, idProduct], (err, result) => {
+  connection.query(sql, [ idOrder, idClient, idProduct], (err, result) => {
     if (err) {
       res.status(500).json("Erreur lors de la récupération d'un produit d'une commande d'un client");
     } else if (result === 0) {

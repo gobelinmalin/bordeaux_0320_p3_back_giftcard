@@ -31,7 +31,7 @@ router.get('/', (req, res) => {
         // get all shops
         connection.query('SELECT * FROM shop', (err, result) => {
             if (err) {
-                res.status(500).send('Error retrieving shops')
+                res.status(500).json('Error retrieving shops')
             } else {
                 res.status(200).send(result)
             }
@@ -40,10 +40,10 @@ router.get('/', (req, res) => {
 });
 
 //GET shop by ID
-router.get('/:id', (req, res) => {
-    const { id } = req.params;
+router.get('/:idShop', (req, res) => {
+    const { idShop } = req.params;
 
-    connection.query('SELECT * FROM shop WHERE id = ?', [id], (err, result) => {
+    connection.query('SELECT * FROM shop WHERE id = ?', [idShop], (err, result) => {
         if (err) {
             res.status(500).send('Error retrieving id selected shop')
         } else if (result.length === 0) {
@@ -58,7 +58,7 @@ router.get('/:id', (req, res) => {
 router.get('/:idShop/products/:idProduct', (req, res) => {
     const { idShop, idProduct } = req.params;
     
-    // 'SELECT * FROM product AS p JOIN shop AS s ON p.id_shop = s.id WHERE s.id = ? AND p.id = ?'
+    // 'SELECT p.*, c.* FROM card AS c JOIN product AS p ON p.id = c.id_product JOIN shop AS s ON p.id_shop = s.id WHERE s.id = ? AND p.id = ?'
     connection.query('SELECT * FROM product WHERE id_shop = ? AND id = ?', [idShop, idProduct], (err, result) => {
         if (err) {
             res.status(500).json('Error retrieve a product from a shop');
@@ -81,7 +81,7 @@ router.get('/:idShop/tags', (req, res) => {
 
 //Get all cities of one shop with it's id
 router.get('/:idShop/cities', (req, res) => {
-    connection.query('SELECT * FROM city AS c JOIN shop_city AS sc ON c.id = sc.id_city JOIN shop AS s ON s.id = sc.id_shop WHERE s.id = ?',req.params.idProduct, (err, result) => {
+    connection.query('SELECT * FROM city AS c JOIN shop_city AS sc ON c.id = sc.id_city JOIN shop AS s ON s.id = sc.id_shop WHERE s.id = ?',req.params.idShop, (err, result) => {
         if (err) {
             res.status(500).json('Erreur lors de la récupération des villes liées à une enseigne')
         } else {
@@ -139,11 +139,11 @@ router.post('/:idShop/tags/:idTag', (req, res) => {
 });
 
 // UPDATE a shop by its ID
-router.put('/:id', (req,res) => {
+router.put('/:idShop', (req,res) => {
     const formData = req.body;
-    const { id } = req.params;
+    const { idShop } = req.params;
 
-    connection.query('UPDATE shop SET ? WHERE id = ?', [formData, id], (err) => {
+    connection.query('UPDATE shop SET ? WHERE id = ?', [formData, idShop], (err) => {
         if(err) {
             res.status(500).json('Error updating a shop')
         } else {
@@ -154,7 +154,7 @@ router.put('/:id', (req,res) => {
 
 
 // DELETE a shop
-router.delete('/:id', (req, res) => {
+router.delete('/:idShop', (req, res) => {
     const { idShop } = req.params;
 
     connection.query('DELETE FROM shop WHERE id = ?', [idShop] ,(err, result) => {

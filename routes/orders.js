@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 
 // get product order on the month 
 router.get('/products', (req, res) => {
-    connection.query('SELECT * FROM product AS p JOIN `order` AS o ON p.id_order = o.id WHERE MONTH(o.createDate) = MONTH(NOW())', (err, results) =>  {
+    connection.query('SELECT p.*, c.id AS idcard, c.creationDate, c.id_product, c.id_order, c.format, c.sale_status, c.credit FROM product AS p JOIN card AS c ON p.id = c.id_product JOIN `order` AS o ON c.id_order = o.id WHERE MONTH(o.createDate) = MONTH(NOW())', (err, results) =>  {
         if(err){
             res.status(500).send('Erreur lors de la récupération des produits commandés dans le mois')
         }
@@ -29,12 +29,27 @@ router.get('/products', (req, res) => {
     })
 });
 
+// get delivery of one order 
+router.get('/:id/delivery', (req, res) => {
+    const oneOrder = req.params.id;
+    connection.query('SELECT * FROM `order` AS o JOIN delivery AS d ON o.id_delivery = d.id WHERE o.id_delivery = ?', [oneOrder], (err, results) => {
+        if(err){
+            res.status(500).send(`Erreur lors de la récupération des informations la commande ${oneOrder}`);
+        } 
+        if (results.length === 0) {
+            res.status(404).send('Commande non trouvée')
+        } else {
+            res.json(results[0]);
+        }
+    });
+});
+
+
 // get one order
 router.get('/:id', (req, res) => {
     const oneOrder = req.params.id;
     connection.query('SELECT * FROM `order` WHERE id = ?', [oneOrder], (err, results) => {
         if(err){
-            console.log(err);
             res.status(500).send(`Erreur lors de la récupération de la commande ${oneOrder}`);
         } 
         if (results.length === 0) {

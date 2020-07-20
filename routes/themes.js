@@ -11,7 +11,19 @@ router.get('/', (req, res) => {
             res.status(200).json(result)
         }
     })
-})
+});
+
+// GET one theme with it's id
+router.get('/:id', (req, res) => {
+    const { id } = req.params;
+    connection.query('SELECT * FROM theme WHERE id = ?',[id], (err, result) => {
+        if (err) {
+            res.status(500).json('Erreur lors de la récupération de d\'un theme selon son id')
+        } else {
+            res.json(result);
+        }
+    })
+});
 
 // POST one theme;
 router.post('/', (req, res) => {
