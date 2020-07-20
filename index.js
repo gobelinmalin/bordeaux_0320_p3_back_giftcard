@@ -18,5 +18,4 @@ app.listen(port, (err) => {
     if (err) {
         throw new Error("There is an error");
     }
-    console.log(`Port ${port}`);
 });
