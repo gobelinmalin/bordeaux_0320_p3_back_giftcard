@@ -4,10 +4,10 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 var pool = mysql.createPool({
-  host: process.env.HEROKU_HOST,
-  user: process.env.HEROKU_USER,
-  password: process.env.HEROKU_PASSWORD,
-  database: process.env.HEROKU_DATABASE,
+  host: process.env.DOKKU_HOST,
+  user: process.env.DOKKU_USER,
+  password: process.env.DOKKU_PASSWORD,
+  database: process.env.DOKKU_DATABASE
 });
 module.exports = {
   query: function() {
