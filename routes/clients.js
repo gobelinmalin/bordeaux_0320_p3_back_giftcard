@@ -82,7 +82,7 @@ router.get("/:idClient/orders/:idOrder/products", (req, res) => {
 router.get("/:idClient/orders/:idOrder/deliveries/products", (req, res) => {
   const { idClient, idOrder } = req.params;
   const sql =
-    "SELECT o.delivery_date, o.createDate, o.id, o.status, p.name, ca.credit, ca.format, d.address, d.zipcode, d.city, d.country, d.mail FROM `order` AS O JOIN client AS c ON c.id = o.id_client JOIN delivery AS d ON o.id_delivery = d.id JOIN card AS ca ON o.id = ca.id_order JOIN product AS p ON p.id = ca.id_product WHERE o.id = ? AND c.id = ?";
+    "SELECT o.delivery_date, o.createDate, o.id, o.status, p.name, ca.credit, ca.format, d.address, d.zipcode, d.city, d.country, d.mail FROM `order` AS o JOIN client AS c ON c.id = o.id_client JOIN delivery AS d ON o.id_delivery = d.id JOIN card AS ca ON o.id = ca.id_order JOIN product AS p ON p.id = ca.id_product WHERE o.id = ? AND c.id = ?";
 
   connection.query(sql, [idOrder, idClient], (err, results) => {
     if (err) {
