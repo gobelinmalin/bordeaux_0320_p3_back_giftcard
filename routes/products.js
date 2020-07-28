@@ -90,7 +90,7 @@ router.get('/cards', (req, res) => {
 router.get('/eCard', (req, res) => {
     connection.query('SELECT p.*, c.id AS idcard, c.creationDate, c.id_product, c.id_order, c.format, c.sale_status,  c.credit FROM product AS p JOIN card AS c ON p.id = c.id_product WHERE format = 1', (err, result) => {
         if (err) {
-            res.status(500).json(err)
+            res.status(500).json('Erreur lors de la récupération de toutes les ecards')
         } else {
             res.json(result)
         }
@@ -101,7 +101,7 @@ router.get('/eCard', (req, res) => {
 router.get('/realCard', (req, res) => {
     connection.query('SELECT p.*, c.id AS idcard, c.creationDate, c.id_product, c.id_order, c.format, c.sale_status,  c.credit FROM product AS p JOIN card AS c ON p.id = c.id_product WHERE format = 0', (err, result) => {
         if (err) {
-            res.status(500).json(err)
+            res.status(500).json('Erreur lors de la récupération de toutes les cartes physiques')
         } else {
             res.json(result)
         }
