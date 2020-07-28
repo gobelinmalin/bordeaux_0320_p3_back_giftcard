@@ -7,6 +7,8 @@ const router = express.Router();
 router.get('/', (req, res) => {
     const nameCountry = req.query.country;
     const nameCity = req.query.city;
+    const theme = req.query.theme;
+    const tag = req.query.tag;
     // filter by country = get shops by country
     if(nameCountry) {
         const countryFilter = 'SELECT * FROM shop AS s JOIN shop_country AS sc ON s.id = sc.id_shop JOIN country AS c ON c.id = sc.id_country WHERE c.name = ?';
@@ -27,6 +29,24 @@ router.get('/', (req, res) => {
                 res.status(200).json(result)
             }
         })
+    } else if(theme) {
+        const themeFilter = 'SELECT s.* FROM shop AS s JOIN product AS p ON p.id_shop = s.id JOIN theme AS t ON t.id = p.id_theme WHERE t.name = ?';
+        connection.query(`${themeFilter}`, theme, (err, result) => {
+            if(err) {
+                res.status(500).json('Erreur lors de la récupération des enseignes selon un thème')
+            } else {
+                res.status(200).json(result)
+            }
+        })
+    } else if (tag){
+        //Get all the products from one tag
+        connection.query('SELECT s.* FROM shop AS s JOIN product AS p ON p.id_shop = s.id JOIN product_tag AS pt ON p.id = pt.id_product JOIN tag as t ON t.id = pt.id_tag WHERE t.name = ?', tag, (err, result) => {
+            if (err) {
+                res.status(500).json('Erreur lors de la récupération de toutes les enseignes selon un tag')
+            } else {
+                res.json(result)
+            }
+        })
     } else {
         // get all shops
         connection.query('SELECT * FROM shop', (err, result) => {
@@ -38,6 +58,40 @@ router.get('/', (req, res) => {
         })
     }
 });
+
+// Get all shop which have products on givyoo
+router.get('/products', (req, res) => {
+    connection.query('SELECT s.* FROM shop AS s JOIN product AS p ON p.id_shop = s.id', (err, result) => {
+        if (err) {
+            res.status(500).json('Erreur lors de la récupération de toutes les enseignes ayant des produits')
+        } else {
+            res.json(result)
+        }
+    })
+})
+
+// Get all eshop where format = 1 (eshop)
+router.get('/online', (req, res) => {
+    connection.query('SELECT * FROM shop AS s WHERE online = 1', (err, result) => {
+        if (err) {
+            res.status(500).json('Erreur lors de la récupération de tous les eshops')
+        } else {
+            res.json(result)
+        }
+    })
+})
+
+// Get all real cards where format = 0 (real card)
+router.get('/offline', (req, res) => {
+    connection.query('SELECT * FROM shop AS s WHERE offline = 1', (err, result) => {
+        if (err) {
+            res.status(500).json('Erreur lors de la récupération de toutes les boutiques physiques')
+        } else {
+            res.json(result)
+        }
+    })
+})
+
 
 //GET shop by ID
 router.get('/:idShop', (req, res) => {
@@ -57,8 +111,6 @@ router.get('/:idShop', (req, res) => {
 // GET one product of one shop
 router.get('/:idShop/products/:idProduct', (req, res) => {
     const { idShop, idProduct } = req.params;
-    
-    // 'SELECT p.*, c.* FROM card AS c JOIN product AS p ON p.id = c.id_product JOIN shop AS s ON p.id_shop = s.id WHERE s.id = ? AND p.id = ?'
     connection.query('SELECT * FROM product WHERE id_shop = ? AND id = ?', [idShop, idProduct], (err, result) => {
         if (err) {
             res.status(500).json('Error retrieve a product from a shop');
