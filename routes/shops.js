@@ -72,7 +72,7 @@ router.get('/products', (req, res) => {
 
 // Get all eshop where format = 1 (eshop)
 router.get('/online', (req, res) => {
-    connection.query('SELECT * FROM shop AS s WHERE online = 1', (err, result) => {
+    connection.query('SELECT s.* FROM shop AS s JOIN product AS p ON p.id_shop = s.id WHERE online = 1', (err, result) => {
         if (err) {
             res.status(500).json('Erreur lors de la récupération de tous les eshops')
         } else {
@@ -83,7 +83,7 @@ router.get('/online', (req, res) => {
 
 // Get all real cards where format = 0 (real card)
 router.get('/offline', (req, res) => {
-    connection.query('SELECT * FROM shop AS s WHERE offline = 1', (err, result) => {
+    connection.query('SELECT s.* FROM shop AS s JOIN product AS p ON p.id_shop = s.id WHERE offline = 1', (err, result) => {
         if (err) {
             res.status(500).json('Erreur lors de la récupération de toutes les boutiques physiques')
         } else {
