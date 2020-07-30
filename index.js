@@ -28,7 +28,7 @@ app.listen(port, (err) => {
 app.use(express.static('public'));
 app.use(fileUpload());
 // file upload api
-app.post('api/upload', (req, res) => {
+app.post('/api/upload', (req, res) => {
   if (!req.files) {
       return res.status(500).send({ msg: "file is not found" })
   }
